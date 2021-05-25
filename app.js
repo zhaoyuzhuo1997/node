@@ -6,17 +6,26 @@ const dotenv = require('dotenv');
 const methodOverride = require('method-override');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
+const { sequelize } = require("./models");
 
 dotenv.config();
 
 const app = express();
 app.set('port', process.env.PORT || 3000);
 app.set("view engine", "html");
-
 nunjucks.configure("views", {
 	express : app,
 	watch : true,
 });
+
+/** DB 연결 */
+sequelize.sync({ force : false })
+			.then(() => {
+				console.log("데이터베이스 연결 성공!");
+			})
+			.catch((err) => {
+				console.error(err);
+			});
 
 app.use(morgan('dev'));
 app.use(methodOverride("_method"));
@@ -26,7 +35,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cookieParser(process.env.COOKIE_SECRET)); // 쿠키 설정
 app.use(session({
 	resave: false,
-	saveUninitalized : false,
+	saveUninitialized : false,
+	cookie : {
+		httpOnly : true,
+		secure : false,
+	},
+	name : 'jysession',
 }));
 
 
