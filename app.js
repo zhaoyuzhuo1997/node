@@ -7,6 +7,11 @@ const methodOverride = require('method-override');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const { sequelize } = require("./models");
+const {loginSession } = require('./middelwares/login_session');
+
+/** 라우터 */
+const memberRouter = require('./routes/member');
+const adminRouter = require('./routes/admin');
 
 dotenv.config();
 
@@ -32,10 +37,10 @@ app.use(methodOverride("_method"));
 app.use(express.json());
 app.use(express.urlencoded({ extended : false }));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(cookieParser(process.env.COOKIE_SECRET)); // 쿠키 설정
+app.use(cookieParser(process.env.COOKIE_SECRET)); // 쿠기 설정 
 app.use(session({
 	resave: false,
-	saveUninitialized : false,
+	saveUninitialized : true,
 	cookie : {
 		httpOnly : true,
 		secure : false,
@@ -43,21 +48,25 @@ app.use(session({
 	name : 'jysession',
 }));
 
+app.use(loginSession);
 
-// 3) 없는 페이지 처리 미들웨어(라우터)
+/** 라우터 등록 */
+app.use("/member", memberRouter);
+app.use("/admin", adminRouter);
+
+// 없는 페이지 처리 미들웨어(라우터)
 app.use((req, res, next) => {
-	const error = new Error(`${req.method} ${req.url}은 없는 페이지입니다.`);
+	const error = new Error(`${req.method} ${req.url}은 없는 페이지 입니다.`);
 	error.status = 404;
-	next(error); // 에러 처리 미들웨어로 전달
+	next(error); // 에러 처리 미들웨어로 전달 
 });
 
-// 2) 에러 처리 미들웨어(라우터)
+// 에러 처리 미들웨어(라우터)
 app.use((err, req, res, next) => {
 	res.locals.error = err;
 	res.status(err.status || 500).render('error');
 });
 
-// 1)
 app.listen(app.get('port'), () => {
 	console.log(app.get('port'), '번 포트에서 대기중');
 });
