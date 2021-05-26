@@ -13,6 +13,7 @@ const { loginSession } = require('./middlewares/login_session');
 /** 라우터 */
 const memberRouter = require('./routes/member');
 const adminRouter = require('./routes/admin');
+const uploadRouter = require('./routes/upload');
 
 dotenv.config();
 
@@ -54,6 +55,7 @@ app.use(loginSession);
 /** 라우터 등록 */
 app.use("/member", memberRouter);
 app.use("/admin", adminRouter);
+app.use("/upload", uploadRouter);
 
 // 없는 페이지 처리 미들웨어(라우터)
 app.use((req, res, next) => {
