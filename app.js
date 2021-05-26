@@ -47,7 +47,7 @@ app.use(session({
 		httpOnly : true,
 		secure : false,
 	},
-	name : 'jysession',
+	name : 'yhsession',
 }));
 
 app.use(loginSession);
