@@ -55,6 +55,18 @@ $(function() {
 			case "교육" :
 				template = "education";
 				break;
+			case "자격증" :
+				template = "license";
+				break;
+			case "수상" :
+				template = "award";
+				break;
+			case "해외경험" :
+				template = "overseas";
+				break;
+			case "어학" :
+				template = "language";
+				break;
 		}
 		
 		if (template) {
