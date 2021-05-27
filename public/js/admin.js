@@ -1,16 +1,78 @@
 /**
-* 선택한 메뉴에 따라 이력서 양식 항목 노출, 미노출 처리
+* 템플릿 양식 추가 처리 
+*
+*/
+function addForm(type, target)
+{
+	let template = "";
+	switch (type) {
+		case "학력" : 
+			template = "school";
+			break;
+		case "경력" : 
+			template = "job_history";
+			break;
+		case "인턴" : 
+			template = "intern";
+			break;
+		case "교육" : 
+			template = "education";
+			break;
+		case "자격증" : 
+			template = "license"; 
+			break;
+		case "수상" : 
+			template = "award";
+			break;
+		case "해외경험" : 
+			template = "overseas"; 
+			break;
+		case "어학" : 
+			template = "language";
+			break;
+		case "자기소개" : 
+			template = "introduction";
+			break;
+		case "포트폴리오" :
+			template = "portfolio";
+			break;
+	}
+		
+	if (template) {
+		let html = $("#template_" + template).html();
+					
+		if (target.length > 0) {
+			const no = new Date().getTime();
+			html = html.replace(/<%=no%>/g, no);
+		}
+			
+		target.append(html);
+	} 
+}
+
+/**
+* 선택한 메뉴에 따라 이력서 양식 항목 노출,미노출 처리
 *
 */
 function updateSelectedMenu()
 {
-	$list = $(".floating_box input[type='check']");
+	$list = $(".floating_box input[type='checkbox']");
 	$.each($list, function() {
 		const target = $(this).data("target");
-		it ($(this).prop("checked")) {
-			$("section." + target).remvoeClass("dn");
+		$target = $("section." + target);
+		if ($(this).prop("checked")) {
+			$target.removeClass("dn");
+			
+			/** 현재 영역에 추가된 입력 양식이 없으면 추가 */
+			const cnt = $target.find(".rows").length;
+			$form = $target.find(".add_form"); 
+			if (cnt == 0 && $form.length > 0) { // 양식 추가 항목 중에서 추가된 양식이 없는 경우 자동 추가 
+				const type = $form.data("type");
+				$formHtml = $target.find(".form_html");
+				addForm(type, $formHtml);
+			}
 		} else {
-			$("section." + target).remvoeClass("dn").addClass("dn");
+			$target.removeClass("dn").addClass("dn");
 		}
 	});
 }
@@ -101,51 +163,8 @@ $(function() {
 	/** 양식 추가 처리 */
 	$(".add_form").click(function() {
 		const type = $(this).data("type");
-		let template = "";
-		switch (type) {
-			case "학력" : 
-				template = "school";
-				break;
-			case "경력" : 
-				template = "job_history";
-				break;
-			case "인턴" : 
-				template = "intern";
-				break;
-			case "교육" : 
-				template = "education";
-				break;
-			case "자격증" : 
-				template = "license"; 
-				break;
-			case "수상" : 
-				template = "award";
-				break;
-			case "해외경험" : 
-				template = "overseas"; 
-				break;
-			case "어학" : 
-				template = "language";
-				break;
-			case "자기소개" : 
-				template = "introduction";
-				break;
-			case "포트폴리오" :
-				template = "portfolio";
-				break;
-		}
-		
-		if (template) {
-			let html = $("#template_" + template).html();
-					
-			$target = $(this).closest(".form_inner").find(".form_html");
-			if ($target.length > 0) {
-				const no = new Date().getTime();
-				html = html.replace(/<%=no%>/g, no);
-			}
-			
-			$target.append(html);
-		} 
+		$target = $(this).closest(".form_inner").find(".form_html");
+		addForm(type, $target);
 	});
 	
 	/** 양식 제거 처리 */
@@ -179,5 +198,12 @@ $(function() {
 	/** floating 메뉴 선택 처리 */
 	$(".floating_box input[type='checkbox']").click(function() {
 		updateSelectedMenu();
+	});
+	
+	/** 이력서 저장하기 처리 */
+	$(".floating_box .save").click(function() {
+		if (confirm('정말 저장하시겠습니까?')) {
+			frmProfile.submit();
+		}
 	});
 });
