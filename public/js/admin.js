@@ -1,3 +1,29 @@
+/** 
+* 취업우대,병역 항목 선택시 
+* 장애, 병역 선택에 따른 항목 노출 
+*
+*/
+function updateBenefit()
+{
+	$list = $(".benefit input[type='checkbox']:checked");
+	let isAdditionalSelect = false;
+	$(".additional_select, .additional_select dl").removeClass("dn").addClass("dn");
+	$.each($list, function() {
+		const benefit = $(this).val();
+		if (benefit == '장애') {
+			isAdditionalSelect = true;
+			$(".additional_select .handicap").removeClass("dn");
+		} else if (benefit == '병역') {
+			isAdditionalSelect = true;
+			$(".additional_select .military").removeClass("dn");
+		}
+	});
+	
+	if (isAdditionalSelect) {
+		$(".additional_select").removeClass("dn");
+	}
+}
+
 /**
 * 프로필 사진 업로드 처리
 *
@@ -46,32 +72,35 @@ $(function() {
 			case "학력" : 
 				template = "school";
 				break;
-			case "경력" :
+			case "경력" : 
 				template = "job_history";
 				break;
-			case "인턴" :
+			case "인턴" : 
 				template = "intern";
 				break;
-			case "교육" :
+			case "교육" : 
 				template = "education";
 				break;
-			case "자격증" :
-				template = "license";
+			case "자격증" : 
+				template = "license"; 
 				break;
-			case "수상" :
+			case "수상" : 
 				template = "award";
 				break;
-			case "해외경험" :
-				template = "overseas";
+			case "해외경험" : 
+				template = "overseas"; 
 				break;
-			case "어학" :
+			case "어학" : 
 				template = "language";
+				break;
+			case "자기소개" :
+				template = "introduction";
 				break;
 		}
 		
 		if (template) {
 			let html = $("#template_" + template).html();
-			
+					
 			$target = $(this).closest(".form_inner").find(".form_html");
 			if ($target.length > 0) {
 				const no = new Date().getTime();
@@ -90,10 +119,18 @@ $(function() {
 	
 	/** textarea 확대 축소 처리 */
 	$("body").on("focus", ".form_html textarea", function() {
-		$(this).removeClass("h200").addClass("h200");
+		if (!$(this).hasClass("intro")) {
+			$(this).removeClass("h200").addClass("h200");
+		}
 	});
 	
 	$("body").on("blur", ".form_html textarea", function() {
 		$(this).removeClass("h200");
 	});
+	
+	/** 취업우대, 병역 클릭 처리 */
+	$(".benefit input[type='checkbox']").click(function() {
+		updateBenefit();
+	});
+	
 });
