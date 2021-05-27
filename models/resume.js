@@ -257,6 +257,7 @@ const resume = {
 			sql = 'TRUNCATE overseas';
 			await sequelize.query(sql, { type : QueryTypes.DELETE });
 			if (params.items && params.items.indexOf('해외경험') != -1) {
+	
 				if (!(params.overseasName instanceof Array)) {
 					params.overseasName = [params.overseasName];
 					params.overseasStartDate = [params.overseasStartDate];
@@ -267,7 +268,7 @@ const resume = {
 				params.overseasName.forEach(async (name, index) => {
 					const sql = `INSERT INTO overseas (name, startDate, endDate, description)
 										VALUES (:name, :startDate, :endDate, :description)`;
-					
+				
 					const replacements = {
 							name : name, 
 							startDate : params.overseasStartDate[index],
