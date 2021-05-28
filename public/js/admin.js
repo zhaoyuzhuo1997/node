@@ -98,7 +98,7 @@ function getResume()
 			
 			/** 이미지 처리 */
 			if (res.profile) {
-				$(".photo_upload").html(`<img src='${res.profile}'>`);
+				$(".photo_upload").html( `<img src='${res.profile}'>`);
 				$(".photo_upload").parent().append("<i class='xi-close photo_remove'></i>");
 			}
 			
@@ -285,6 +285,7 @@ function uploadCallback(isSuccess)
 	if (isSuccess) { // 성공 
 		const tag = `<img src='/profile/profile'>`;
 		$(".photo_upload").html(tag);
+		$(".photo_upload").parent().append("<i class='xi-close photo_remove'></i>");
 	} else { // 실패 
 		alert("이미지 업로드 실패");
 	}
@@ -359,16 +360,40 @@ $(function() {
 	
 	/** 이력서 이미지 삭제 */
 	$("body").on("click", ".photo_remove", function() {
+		if (!confirm('정말 삭제하시겠습니까?')) {
+			return;
+		}
+		
 		$.ajax({
 			url : "/admin/remove_photo",
 			type : "get",
-			dataType : "html",
+			dataType : "text",
 			success : function (res) {
-				console.log(res);
+				if (res.trim() == "1") { // 삭제 성공 
+					const tag = `<i class='xi-plus-circle-o icon'></i>
+									<div class='t'>사진추가</div>`;
+					$(".photo_upload").html(tag);
+					$(".photo_remove").remove();
+				} else { // 삭제 실패
+					alert("이미지 삭제 실패");
+				}
 			},
 			error : function (err) {
-				consoloe.error(err);
+				console.error(err);
 			}
 		});
+	});
+	
+	/** 학력에서 학교 구분 선택 처리 */
+	$("body").on("change", "select[name='schoolType']", function() {
+		$section = $(this).closest("section");
+		$target = $section.find(".status, .major, .score, .scoreTotal");
+		if ($(this).val() == '고등학교' || $(this).val() == "") {
+			$target.addClass("dn");
+			$section.find(".schoolTransferTxt").text("대입검정고시");
+		} else { // 고등학교 외 
+			$target.removeClass("dn");
+			$section.find(".schoolTransferTxt").text("편입");
+		}
 	});
 });
