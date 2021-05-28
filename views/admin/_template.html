@@ -25,7 +25,7 @@
 				<div class='guide_tit'>졸업년월</div>
 				<input type='text' name='schoolEndDate'>
 			</div>
-			<div class='select_box status w115 dn'>
+			<div class='select_box status dn'>
 				<select name='schoolStatus'>
 					<option value=''>졸업상태</option>
 					<option value='졸업'>졸업</option>
@@ -37,9 +37,9 @@
 				</select>
 			</div>
 			<div class='choice_box'>
-				<input type='hidden' name='schoolTranfer' value='0'>
+				<input type='hidden' name='schoolTransfer' value='0'>
 				<input type='checkbox' name='_schoolTransfer' class='schoolTransfer' value='1' id='schoolTransfer<%=no%>'>
-				<label for='schoolTranfer<%=no%>' class='schoolTransferTxt'>대입검정고시</label>
+				<label for='schoolTransfer<%=no%>' class='schoolTransferTxt'>대입검정고시</label>
 			</div>
 			
 			<div class='input_box major dn'>
@@ -87,7 +87,8 @@
 						<input type='text' name='jhEndDate'>
 					</div>
 					<div class='choice_box'>
-						<input type='checkbox' name='jhInOffice' id='jhInOffice<%=no%>'>
+						<input type='hidden' name='jhInOffice' value='0'>
+						<input type='checkbox' name='_jhInOffice' class='jhInOffice' id='jhInOffice<%=no%>'>
 						<label for='jhInOffice<%=no%>'>재직중</label>
 					</div>
 					

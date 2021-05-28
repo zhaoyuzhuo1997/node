@@ -81,14 +81,33 @@ const resume = {
 				if (!(params.schoolType instanceof Array)) {
 					params.schoolType = [params.schoolType];
 					params.schoolName = [params.schoolName];
+					params.schoolStartDate = [params.schoolStartDate];
+					params.schoolEndDate = [params.schoolEndDate];
+					params.schoolStatus = [params.schoolStatus];
+					params.schoolTransfer = [params.schoolTransfer];
+					params.schoolMajor = [params.schoolMajor];
+					params.schoolScore = [params.schoolScore];
+					params.schoolScoreTotal = [params.schoolScoreTotal];
 				}
 				
-				params.schoolType.forEach(async (type, index) => {
-						name = params.schoolName[index];
+				params.schoolType.forEach(async (type, index) => {				
+						const sql = `INSERT INTO school (type, name, startDate, endDate, status, transfer, major, score, scoreTotal)
+												VALUES (:type, :name, :startDate, :endDate, :status, :transfer, :major, :score, :scoreTotal)`;
+												
+						const replacements = {
+								type : type,
+								name : params.schoolName[index],
+								startDate : params.schoolStartDate[index],
+								endDate : params.schoolEndDate[index],
+								status : params.schoolStatus[index],
+								transfer : params.schoolTransfer[index],
+								major : params.schoolMajor[index],
+								score : params.schoolScore[index],
+								scoreTotal : params.schoolScoreTotal[index],
+						};
 						
-						const sql = "INSERT INTO school (type, name) VALUES (?, ?)";
 						await sequelize.query(sql, {
-							replacements : [type, name],
+							replacements,
 							type : QueryTypes.INSERT,
 						});
 				});
