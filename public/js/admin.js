@@ -1,4 +1,3 @@
-  
 /** 
 * 저장된 이력서 호출 
 *
@@ -22,12 +21,12 @@ function getResume()
 								break;
 							case "checkbox" :
 								if (res.basicinfo[key] instanceof Array) { // 복수 checkbox
-									// 취업우대, 병역 노출
+									// 취업우대, 병역 노출 
 									if (res.basicinfo[key].length > 0) {
 										$("section.benefit").removeClass("dn");
-										$("#selection_items10").prop("checked", true);
+										$(".floating_box .benefit").prop("checked", true);
 									}
-									
+								
 									$.each($target, function() {
 										const v = $(this).val();
 										let checked = false;
@@ -39,12 +38,11 @@ function getResume()
 											} else if (v == '병역') {
 												$(".additional_select, .additional_select .military").removeClass("dn");
 											}
-											
 										}
 										
 										$(this).prop("checked", checked);
 									});
-								} else { // 단일 checkbox
+								} else { // 단일 checkbox 
 									$target.prop("checked", res.basicinfo[key]);
 								}
 								break;
@@ -54,31 +52,48 @@ function getResume()
 			} // endif
 			/* basicinfo */
 			
-			/** 나머지 테이블 */
+			/** 나머지 테이블 처리 */
 			for (table in res) {
 				if (table == 'basicinfo') continue;
 				
 				let type = "";
 				switch (table) {
-					case "award" :
+					case "award" : 
 						type = "수상";
 						break;
-					case "education" :
+					case "education" : 
 						type = "교육";
 						break;
-					case "intern" :
+					case "intern" : 
 						type = "인턴";
 						break;
-					case "introduction" :
+					case "introduction":
 						type = "자기소개";
 						break;
-					case "jobhistory" :
+					case "jobhistory" : 	
 						type = "경력";
+						break;
+					case "language" :
+						type = "어학";
+						break;
+					case "license" :
+						type = "자격증";
+						break;
+					case "overseas" : 
+						type = "해외경험";
+						break;
+					case "portfolio" : 
+						type = "포트폴리오";
+						break;
+					case "school" : 
+						type = "학력";
 						break;
 				}
 				
-			}
-			
+				// $target - form_html
+				$target = $("section." + table + " .form_html");
+				addForm(type, $target, res[table]);
+			} // endfor
 			/** 나머지 테이블 처리 */
 			
 		},
@@ -92,7 +107,7 @@ function getResume()
 * 템플릿 양식 추가 처리 
 *
 */
-function addForm(type, target)
+function addForm(type, target, list)
 {
 	let template = "";
 	switch (type) {
@@ -135,8 +150,44 @@ function addForm(type, target)
 			const no = new Date().getTime();
 			html = html.replace(/<%=no%>/g, no);
 		}
+		
+		if (list) { // 데이터가 있으면 갯수만큼 추가 
+			if (list.length > 0) {
+				$("section." + template).removeClass("dn");
+				$(".floating_box ." + template).prop("checked", true);
+			}
 			
-		target.append(html);
+			
+			list.forEach((data) => {
+				// 데이터를 완성 처리 
+				$tplHtml = $(html);
+				const selector = ["input[type='text']", "textarea", "select"];
+				selector.forEach((selector) => {
+					$texts = $tplHtml.find(selector);
+					$.each($texts, function() {
+						const name = $(this).attr("name").toLowerCase();
+						for(key in data) {
+							let keyName = key.toLowerCase();
+							if (keyName == 'description') keyName = 'desc';
+							
+							if (name.indexOf(keyName) != -1) {
+								// 일치하는 name이 있는 경우 
+								$(this).val(data[key]);
+								
+								if (selector == 'select') {
+									$(this).change();
+								}
+								break;
+							}
+						}
+					});
+				});
+				
+				target.append($tplHtml);
+			});
+		} else { // DB 에 데이터 없는 경우는 1개만 추가 
+			target.append(html);
+		}
 	} 
 }
 
