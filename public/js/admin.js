@@ -96,6 +96,12 @@ function getResume()
 			} // endfor
 			/** 나머지 테이블 처리 */
 			
+			/** 이미지 처리 */
+			if (res.profile) {
+				$(".photo_upload").html(`<img src='${res.profile}'>`);
+				$(".photo_upload").parent().append("<i class='xi-close photo_remove'></i>");
+			}
+			
 		},
 		error : function (err) {
 			console.error(err);
@@ -349,5 +355,20 @@ $(function() {
 		if (confirm('정말 저장하시겠습니까?')) {
 			frmProfile.submit();
 		}
+	});
+	
+	/** 이력서 이미지 삭제 */
+	$("body").on("click", ".photo_remove", function() {
+		$.ajax({
+			url : "/admin/remove_photo",
+			type : "get",
+			dataType : "html",
+			success : function (res) {
+				console.log(res);
+			},
+			error : function (err) {
+				consoloe.error(err);
+			}
+		});
 	});
 });
