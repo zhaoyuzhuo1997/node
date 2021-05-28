@@ -257,7 +257,6 @@ const resume = {
 			sql = 'TRUNCATE overseas';
 			await sequelize.query(sql, { type : QueryTypes.DELETE });
 			if (params.items && params.items.indexOf('해외경험') != -1) {
-	
 				if (!(params.overseasName instanceof Array)) {
 					params.overseasName = [params.overseasName];
 					params.overseasStartDate = [params.overseasStartDate];
@@ -268,7 +267,7 @@ const resume = {
 				params.overseasName.forEach(async (name, index) => {
 					const sql = `INSERT INTO overseas (name, startDate, endDate, description)
 										VALUES (:name, :startDate, :endDate, :description)`;
-				
+					
 					const replacements = {
 							name : name, 
 							startDate : params.overseasStartDate[index],
@@ -371,13 +370,13 @@ const resume = {
 		}
 	},
 	/**
-	* 저장된 이력서 데이터
+	* 저장된 이력서 데이터 
 	*
 	*/
 	get : async function() {
 		const tables = [
 			'basicinfo',
-			'award',
+			'award', 
 			'education',
 			'intern',
 			'introduction',
@@ -392,9 +391,9 @@ const resume = {
 		try {
 			for (let i = 0; i < tables.length; i++) {
 				table = tables[i];
-				let sql = "SELECT * FROM :" + table;
+				let sql = "SELECT * FROM " + table;
 				if (table != 'basicinfo') {
-					sql += "ORDER BY idx";
+					sql += " ORDER BY idx";
 				}
 				
 				const rows = await sequelize.query(sql, {
@@ -404,15 +403,15 @@ const resume = {
 				if (table == 'basicinfo') { // 기본 인적사항 -> 레코드 1개
 					data[table] = rows[0];
 					data[table].benefit = data[table].benefit?data[table].benefit.split("||"):[];
-			
-				} else { // 나머지는 레코드 여러개
+					
+				} else { // 나머지는 레코드 여러개 
 					data[table] = rows;
 				}
 			}
 		} catch (err) {
 			return {};
 		}
-		console.log(data);
+		
 		return data;
 	},
 };
