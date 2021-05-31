@@ -166,6 +166,12 @@ input[type='email'] { border: 1px solid #d5d5d5; padding: 0 10px; height: 40px; 
 .admin_page .benefit dl.handicap { margin-bottom: 10px; }
 .admin_page .benefit .additional_select select { border: 1px solid #dddddd; width: 180px; height: 62px; background-color: #ffffff; }
 
+.admin_page .benefit .military select { float: left; }
+.admin_page .benefit .military .add_info { float: left; }
+
+.admin_page .benefit .military:after { clear: left; content: ''; display: block; }
+.admin_page .benefit .military input[type='text'] { width: 115px; border-radius: 0; height: 62px; margin-left: 8px; }
+
 /** 자기 소개 */
 .admin_page .introduction input[type='text'] { width: 100%; height: 60px; padding: 0 15px; border: 1px solid #dddddd; border-radius: 0; font-size: 16px; color: #333333; }
 .admin_page .introduction textarea { height: 265px; padding: 15px; font-size: 16px; color: #333333; border: 1px solid #dddddd; border-top: 0; width: 100%; resize: none; outline: none; }

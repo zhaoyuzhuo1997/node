@@ -49,6 +49,23 @@ function getResume()
 						}
 					}
 				}
+				// basicInfo select 부분 처리 
+				if (res.basicinfo.handicapLevel) {
+					$("select[name='handicapLevel']").val(res.basicinfo.handicapLevel).change();
+				}
+				
+				if (res.basicinfo.military) {
+					$("select[name='military']").val(res.basicinfo.military).change();
+					
+					$t = $(".military .add_info");
+					if (res.basicinfo.military == '군필') {
+						$t.removeClass("dn");
+					} else {
+						$t.removeClass("dn").addClass("dn");
+					}
+				}
+				
+				
 			} // endif
 			/* basicinfo */
 			
@@ -89,7 +106,7 @@ function getResume()
 						type = "학력";
 						break;
 				}
-				
+		
 				// $target - form_html
 				$target = $("section." + table + " .form_html");
 				addForm(type, $target, res[table]);
@@ -158,14 +175,13 @@ function addForm(type, target, list)
 				$(".floating_box ." + template).prop("checked", true);
 			}
 			
-			
 			list.forEach((data) => {
 				// 데이터를 완성 처리 
 				let html2 = html;
 				html2 = html2.replace(/<%=no%>/g, new Date().getTime());
 				
 				$tplHtml = $(html2);
-				const selector = ["input[type='text']", "textarea", "select"];
+				const selector = ["input[type='text']", "textarea", "select", "input[type='hidden']", "input[type='checkbox']"];
 				selector.forEach((selector) => {
 					$texts = $tplHtml.find(selector);
 					$.each($texts, function() {
@@ -178,24 +194,33 @@ function addForm(type, target, list)
 								// 일치하는 name이 있는 경우 
 								$(this).val(data[key]);
 								
-								if (selector == 'select') {
-									$(this).change();
-									$school1 = $(this).closest(".rows").find(".status, .major, .score, .scoreTotal");
-									$school2 = $(this).closest(".rows").find(".schoolTransferTxt");
-									//console.log(data[key].type);
-									if (data[key].type == '고등학교') {
-										$school1.addClass("dn");
-										$school2.text("대입검정고시");
-									} else {
-										$school1.removeClass("dn");
-										$school2.text("편입");
-									}
+								switch(selector) {
+									case "select" :
+										// 일치하는 name이 있는 경우 
+										$(this).val(data[key]).change();
+										$school1 = $(this).closest(".rows").find(".status, .major, .score, .scoreTotal");
+										$school2 = $(this).closest(".rows").find(".schoolTransferTxt");
+										if (data.type == '고등학교') {
+											$school1.addClass("dn");
+											$school2.text("대입검정고시");
+										} else {
+											$school1.removeClass("dn");
+											$school2.text("편입");
+										}
+										break;
+									case "input[type='checkbox']" :  // checkbox 
+										$(this).prop("checked", data[key]);
+										break;
+									default : 
+										// 일치하는 name이 있는 경우 
+										$(this).val(data[key]);
 								}
 								break;
 							}
 						}
 					});
 				});
+							
 				
 				target.append($tplHtml);
 			});
@@ -416,5 +441,15 @@ $(function() {
 	$("body").on("click", ".jhInOffice", function() {
 		const v = $(this).prop("checked")?1:0;
 		$(this).parent().find("input[name='jhInOffice']").val(v);
+	});
+	
+	/** 병역 - 군필 선택 추가 정보 처리 */
+	$("body").on("click", ".benefit select[name='military']", function() {
+		$target = $(this).siblings(".add_info");
+		if ($(this).val() == '군필') {
+			$target.removeClass("dn");
+		} else {
+			$target.removeClass("dn").addClass("dn");
+		}
 	});
 });

@@ -40,8 +40,7 @@
 				</div>
 			</div>
 			<div class='box box3'>
-				<div class='photo_upload'>
-					<div class='image' onclick="layer.popup('/upload', 450, 450);"></div>
+				<div class='photo_upload' onclick="layer.popup('/upload', 450, 450);">
 					<i class='xi-plus-circle-o icon'></i>
 					<div class='t'>사진추가</div>
 				</div>
@@ -160,11 +159,14 @@
 	<section class='section portfolio dn'>
 		<div class='tit'>포트폴리오</div>
 		<div class='form_inner'>
-			<div class='form_html'></div>
+			<div class='form_html'>
+				
+			</div>
 			<div class='add_form' data-type='포트폴리오'>
 				<i class='xi-plus-circle-o'></i>
 				포트폴리오 추가
 			</div>
+		</div>
 	</section>
 	<!-- 포트폴리오 E -->
 	
@@ -220,6 +222,13 @@
 						<option value='면제'>면제</option>
 						<option value='해당없음'>해당없음</option>
 					</select>
+					
+					<div class='add_info dn'>
+						<input type='text' name='militaryStartDate' placeholder='입대일'>
+						<input type='text' name='militaryEndDate' placeholder='제대일'>
+						
+						<input type='text' name='militaryRank' placeholder='군별/제대 계급'>
+					</div>
 				</dd>
 			</dl>
 		</div>
@@ -230,7 +239,9 @@
 	<section class='section introduction dn'>
 		<div class='tit'>자기소개서</div>
 		<div class='form_inner'>
-			<div class='form_html'></div>
+			<div class='form_html'>
+				
+			</div>
 			<div class='add_form' data-type='자기소개'>
 				<i class='xi-plus-circle-o'></i>
 				추가
