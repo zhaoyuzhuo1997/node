@@ -371,7 +371,7 @@ const resume = {
 			// introduction 자기소개 S 
 			sql = 'TRUNCATE introduction';
 			await sequelize.query(sql, { type : QueryTypes.DELETE });
-			if (params.items && params.items.indexOf('자기소개') != -1) {
+			if (params.items && params.items.indexOf('자기소개서') != -1) {
 				if (!(params.introductionTitle instanceof Array)) {
 					params.introductionTitle = [params.introductionTitle];
 					params.introduction = [params.introduction];
