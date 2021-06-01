@@ -3,6 +3,12 @@
 <link rel="stylesheet" type="text/css" href="/css/front.css">
 {% endblock %}
 {% block content %}
+{% if isLogin %}
+<div class='print_btn no_print' onclick="window.print();">
+	<i class='xi-print'></i>
+	인쇄하기
+</div>
+{% endif %}
 <div class='container layout_width'>
 	<div class='main_title'>이력서</div>
 	<div class='info_box basic_info'>
