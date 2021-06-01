@@ -452,23 +452,23 @@ const resume = {
 					data[table].birthYear = birthYear;
 					data[table].age = age;
 					
-					// 취업우대사항 항목 포함 여부
+					// 취업우대사항 항목 포함 여부 
 					const benefit = data[table].benefit;
-					data[table].benefit1 = (benefit.indexOf('보훈 대상') != -1)?true:false;
-					date[table].benefit2 = (benefit.indexOf('취업보호 대상') != -1)?true:false;
+					data[table].benefit1 = (benefit.indexOf('보훈대상') != -1)?true:false;
+					data[table].benefit2 = (benefit.indexOf('취업보호 대상') != -1)?true:false;
 					data[table].benefit3 = (benefit.indexOf('고용지원금 대상') != -1)?true:false;
 					data[table].benefit4 = (benefit.indexOf('장애') != -1)?true:false;
 					data[table].benefit5 = (benefit.indexOf('병역') != -1)?true:false;
-				
+					
 				} else { // 나머지는 레코드 여러개 
 					rows.forEach((v, i, _rows) => {
-						// description 컬럼 체크
+						// description 컬럼 체크 
 						if ('description' in v) {
 							_rows[i].description2 = v.description.nl2br();
 						}
 						
 						if ('introduction' in v) {
-							_row[i].introduction2 =v.introduction.nl2br();
+							_rows[i].introduction2 = v.introduction.nl2br();
 						}
 						
 						if (table == 'jobhistory' && 'work' in v) {
@@ -481,7 +481,7 @@ const resume = {
 							_rows[i].period = period.str;
 						}
 					});
-				
+					
 					data[table] = rows;
 				}
 			}
@@ -495,13 +495,13 @@ const resume = {
 			data['profile'] = "/profile/profile";
 		} catch (err) {}
 		
-		// 오늘 날짜 + 요일
+		// 오늘 날짜 + 요일 
 		data.today = this.getToday();
-		
+
 		return data;
 	},
 	/**
-	* 오늘 날짜 요일
+	* 오늘 날짜 요일 
 	*
 	*/
 	getToday : function() {
@@ -513,7 +513,7 @@ const resume = {
 		let day = date.getDate();
 		day = (day < 10)?"0"+day:day;
 		
-		const yoils = ["일", "월", "화", "수", "목", "금", "토"]; // 0~6
+		const yoils = ["일", "월","화","수","목","금","토"]; // 0~6
 		const yoil = yoils[date.getDay()];
 		
 		const dateStr = `${year}년 ${month}월 ${day}일 (${yoil})`;
@@ -521,12 +521,12 @@ const resume = {
 		return dateStr;
 	},
 	/**
-	* 년, 월 기간 계산
+	* 년, 월 기간 계산 
 	*
 	*/
 	getPeriod : function(startDate, endDate) {
 		/**
-		년도 차이 X 12 + 현재 월 -> 총 개월수
+		년도 차이 X 12 + 현재 월 ->  총 개월수 
 		년.월
 		*/
 		endDate = endDate.split(".");
@@ -540,7 +540,7 @@ const resume = {
 		const month = gap % 12;
 		
 		let str = "";
-		if (year) str += year + "년";
+		if (year) str += year + "년 ";
 		if (month) str += month + "개월";
 		
 		return { year, month, str };
